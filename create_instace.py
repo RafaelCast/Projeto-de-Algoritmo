@@ -7,10 +7,10 @@ def create_random_matriz(nLins, nCols):
             vals[i][j] = randint(0, 10)
     return vals
 
-nLins = nCols = 4
+nLins = nCols = 200
 matriz = create_random_matriz(nLins, nCols)
-file = open("/home/rafael/alg/Projeto-de-Algoritmo/myfile.txt", "w+")
-  
+file = open("/home/rafael/alg/myfile.txt", "w+")
+
 content = str(matriz)
 file.write(content)
 file.close()
