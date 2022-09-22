@@ -7,9 +7,9 @@ def create_random_matriz(nLins, nCols):
             vals[i][j] = randint(0, 10)
     return vals
 
-nLins = nCols = 200
+nLins = nCols = 400
 matriz = create_random_matriz(nLins, nCols)
-file = open("/home/rafael/alg/myfile.txt", "w+")
+file = open("/home/rafael/alg/instances/instance-500.txt", "w+")
 
 content = str(matriz)
 file.write(content)
