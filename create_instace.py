@@ -9,10 +9,11 @@ def create_random_matriz(nLins, nCols):
             vals[i][j] = randint(0, 10)
     return vals
 
-nLins = nCols = 10
+nCols = 10
+nLins = 100
 matriz = create_random_matriz(nLins, nCols)
 pathR = os.path.abspath('instance-100.txt')
-path = os.path.join(os.path.dirname(pathR),'Instances', 'teste.txt')
+path = os.path.join(os.path.dirname(pathR),'Instances', 'instance_200.txt')
 file = open(path, "w+")
 
 content = str(matriz)
