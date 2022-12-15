@@ -10,7 +10,7 @@ def create_random_matriz(nLins, nCols):
     return vals
 
 nCols = 10
-nLins = 100
+nLins = 200
 matriz = create_random_matriz(nLins, nCols)
 pathR = os.path.abspath('instance-100.txt')
 path = os.path.join(os.path.dirname(pathR),'Instances', 'instance_200.txt')

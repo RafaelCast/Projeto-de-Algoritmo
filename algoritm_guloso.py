@@ -1,4 +1,3 @@
-
 import math
 import numpy as np
 import pandas as pd
@@ -42,16 +41,15 @@ def linearize(N, nLin, nCol):
 
     return D
 
-def where_in_matrix(D, nLin, nCol, value):
-    for i in range(nLin):
-        for j in range(nCol):
-            if D[i][j] == value:
-                return [i,j]
+def where_in_matrix(D, index, nCol, value):
+    for j in range(nCol):
+        if D[index][j] == value:
+            return j
     return -1
 
 def where_in_aux(aux, index, nCol, value):
     for j in range(nCol):
-        if D[index][j] == value:
+        if aux[index][j] == value:
             return j
     return -1
 
@@ -69,7 +67,7 @@ def bigger_side(D, n, l):
     return side
     
 
-def return_elements(D, m):
+def greedy(D, m):
     max_div = [0,0]
     array = [-1 for i in range(m)]
     n = l = 0
@@ -106,9 +104,9 @@ def return_elements(D, m):
     j = 0
     while i < m:
         j = aux[i-1][0]
-        l = where_in_matrix(D, len(D), len(D), j)[0]
+        l = where_in_matrix(D, array[i-1], len(D), j)
         if l in array:
-            l = where_in_matrix(D, len(D), len(D), j)[1]
+            l = where_in_matrix(D, array[i-1], len(D), j)
         aux[i-1][0] = -1
         aux[i-1].sort(reverse = True)
         if l not in array:
@@ -130,23 +128,62 @@ def return_elements(D, m):
     max_div[1] = sum
     return max_div
 
+def get_sum(D, array):
+    sum = 0
+    for i in range(0, len(array)-1, 1):
+        sum += D[array[i]][array[i+1]]
+    return sum
 
+def sum_one(D, array, first):
+    firstP = 0
+    k = 0
+    for i in range(len(array)):
+        if array[i] == len(D)-1 and firstP == 0 and i != 0:
+            k = i
+            array[i] = 0
+            firstP = 1
+
+        elif array[i] == len(D)-1 and i != 0:
+            array[i] = 0
+    
+    k -= 1
+    if k >= 0:
+        if k == 0 and array[k] == len(D)-1:
+            array[k] = len(D)
+            return array
+        #if array[k] + 1 != len(D):
+        #    array[k] += 1
+        else:
+            #array[k] = 0
+            if k != 0 and first[k] != 1:
+                array[k] += 1
+                array = sum_one(D, array, first)
+            elif k != 0 and first[k] == 1:
+                array[k] = 0
+                first[k] = 0
+                array = sum_one(D, array, first)
+        return array
+
+    return array
 
 def PDM(D, N):
     max_div = [None for i in range(4)]
     i = 0
     sum = list()
     for m in range(int(0.1*len(N)), int(0.5*len(N)), int(0.1*len(N))):
-        max_div[i] = return_elements(D,m)
+        max_div[i] = greedy(D,m)
         i += 1
 
     return max_div
-
-        
+    
+'''
 content = read_file()
 N = eval(content)
-#m = 10
+m = 10
 D = linearize(N, len(N), len(N[0]))
-pdm = PDM(D, N)
-#pdm = return_elements(D, m)
+pdm = greedy(D, m)
 print(pdm)
+pdm = PDM(D, N)
+for i in range(len(pdm)):
+    print(pdm[i])
+'''
