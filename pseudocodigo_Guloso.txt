@@ -1,0 +1,67 @@
+Entrada: D = { matriz linearizada}
+Entrada: m = { tamanho do vetor M }
+Saída: Solução S
+
+início
+	soma = 0 //retornar a soma do caminho
+	n = l = 0
+    enquanto i < tamanho(D) faça
+   		auxiliar[i] = 0;
+	fim
+    // inicia com -1 em todas as posições
+    enquanto i < m faça
+   		S[i] = -1;
+	fim
+	enquanto j < tamanho(D) faça
+		enquanto k < tamanho(D) faça
+			se D[j][k] > sum então
+				soma = D[j][k] 
+				n = j
+				l = k
+            fim
+        fim
+    fim
+
+    maiorL = maior_lado(D, n, l)
+    se maior == n então
+        S[0] = l
+        S[1] = n
+        auxiliar[0] = D[l]
+        auxiliar[1] = D[n]
+    senão
+		S[0] = n
+        S[1] = l
+        auxiliar[0] = D[n]
+        auxiliar[1] = D[l]
+	fim
+    //ordenar e tirar o maior valor das posições encontradas
+    ordenar(auxiliar[0])
+    ordenar(auxiliar[1])
+    auxiliar[0][0] = -1
+    auxiliar[1][0] = -1
+    ordenar(auxiliar[0])
+    ordenar(auxiliar[1])
+    i = 2 // S já possui 
+    enquanto i < m faça elementos
+        j = auxiliar[i-1][0]
+        l = achar_matriz(D, S[i-1], tamanho(D), j) //acha na matriz um elemento
+        auxiliar[i-1][0] = -1
+        ordenar(auxiliar[i-1])
+        se l não estiver em S faça
+            S[i] = linearizada
+            auxiliar[i] = D[l]
+            soma = j 
+            ordenar(auxiliar[i])
+            l = achar_auxiliar(auxiliar, i, tamanho(auxiliar[0]), j) //acha no auxiliar um elemento
+            auxiliar[i][l] = -1
+            ordenar(auxiliar[i])
+            i++
+        senão
+            auxiliar[i-1][0] = -1
+            ordenar(auxiliar[i-1])
+        fim
+        j = 0
+    fim
+    retone S, soma
+
+fim

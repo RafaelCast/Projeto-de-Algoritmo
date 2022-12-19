@@ -14,13 +14,12 @@ def random_neighbor(D, S, m):
     return S
 
 def annealing(D, greedy, m):
-    T0 = 10000
+    T0 = 1000
     T = T0
-    alpha = 0.999
+    alpha = 0.9
     Smax = 1000
     S = greedy.copy()
     i=0
-    Sexit = S.copy()
     '''while T > 0.1:
         i += 1
         T = alpha*T
@@ -32,17 +31,17 @@ def annealing(D, greedy, m):
             S = random_neighbor(D, S, m)
             sum1 = get_sum(D, S)
             sum2 = get_sum(D, Sbest)
+            a = math.exp((get_sum(D, S) - 2*get_sum(D, Sbest))/T)
             if get_sum(D, S) > get_sum(D, Sbest):
-                Sexit = S.copy()
                 Sbest = S.copy()
-            elif random() < math.exp((get_sum(D, S) - get_sum(D, Sbest))/T):
-                Sexit = S.copy()
+            elif random() < a:
+                Sbest = S.copy()
 
         T = alpha*T
         print('-----------------')
         print(T)
-        print(math.exp((get_sum(D, S) - get_sum(D, Sbest))/T))
-    return Sexit
+        print(a)
+    return Sbest
 
 
 def register_file(content1, content2):
@@ -50,6 +49,7 @@ def register_file(content1, content2):
     path = os.path.join(os.path.dirname(pathR), 'result.txt')
     file = open(path, "w+")
     file.write(content1)
+    file.write("\n")
     file.write(content2)
     file.close()
 
@@ -58,19 +58,19 @@ def read_result():
     path = os.path.join(os.path.dirname(pathR), 'result.txt')
     file = open(path, "r")
     
-    content = file.read()
-    file.close()
-    return content
+    lines = file.read()
+    vector = lines.split("\n", 1)[0]
+    return vector
 
 
-content = read_file()
+'''content = read_file()
 N = eval(content)
 m = 10
 D = linearize(N, len(N), len(N[0]))
 greedy = greedy(D, m)
 S = annealing(D, eval(read_result()), m)
+register_file(str(S), str(get_sum(D, S)))
 print("Guloso:", greedy[0])
 print("Soma:", greedy[1])
 print("Annealing:", S)
-print("Soma:", get_sum(D, S))
-register_file(str(S), str(get_sum(D, S)))
+print("Soma:", get_sum(D, S))'''

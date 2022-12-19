@@ -1,0 +1,83 @@
+Entrada: D = { matriz linearizada}
+Entrada: S' = { solução gulosa }
+Entrada: m = { tamanho do vetor M }
+Saída: Solução S
+
+início
+    //inicia o vetor como 1 para sabermos qual posição do vetor inicial foi mexido
+    enquanto i < tamanho(D) faça
+   		primeiro[i] = 0;
+	fim
+    primeiro[tamanho(S')-1] = 0  //as folhas serão mexidas, por isso é possivel já 0 essa posição
+    auxiliar = S'
+    soma = fazer_soma(D, S') //função que faz o caminho pela matriz D e retorna a soma do caminho
+    somaAuxiliar = 0 //variável que ficará com a soma do vetor auxiliar
+    i = m-1
+    l = j = 0
+    auxiliar[i] = 0
+    maior = S'
+    enquanto 1 faça //criar loop para fazer todas as combinações possíveis
+        auxiliar[i-l] = j
+        j++
+        auxiliar = cortar_galhos_ruins(D, auxiliar, primeiro) //função que tira a possibilidade de ter dois numeros seguidos no vetor
+        somaAuxiliar = fazer_soma(D, auxiliar) 
+        se j == tamanho(D) então
+            j = 0
+
+        se somaAuxiliar > soma então
+            soma = somaAuxiliar
+            maior = auxiliar
+        fim
+
+        se auxiliar[i-l] == tamanho(D)-1 então
+            auxiliar[i-l] = 0
+            j = 0
+            l++
+
+            //Esse loop será responsável por somar todos as posições que estiverem saturada
+            //Exemplo: [0 9 9 9], considerando 9 o limite, esse loop fará o vetor ficar [1 0 0 0]
+            enquanto auxiliar[i-l] == tamanho(D)-1 e l < m-1 faça 
+                auxiliar[i-l] = 0
+                l++
+                somaAuxiliar = fazer_soma(D, auxiliar)
+                auxiliar = cortar_galhos_ruins(D, auxiliar, primeiro)
+                se auxiliar[0] = tamanho(D) faça
+                    retorna maior
+                se somaAuxiliar > soma faça
+                    soma = somaAuxiliar
+                    maior = auxiliar
+                fim
+
+                se l == m-1 e auxiliar[i-l] == tamanho(D)-1 faça
+                    retorna maior
+                se auxiliar[i-l] == S[i-l] e primeiro[i-l] == 1 faça //condição para atualizar a proxima posição e saber se o nó é o nó do vetor guloso
+                    auxiliar[i-l] = 0
+                    auxiliar = cortar_galhos_ruins(D, auxiliar, primeiro)
+                    somaAuxiliar = fazer_soma(D, auxiliar)
+                    se auxiliar[0] == tamanho(D) faça // a arvore está com o ultimo nó saturado
+                        retorna maior
+                    se somaAuxiliar > soma faça
+                        soma = somaAuxiliar
+                        maior = auxiliar
+                    
+                    primeiro[i-l] = 0
+                    
+                    senão
+                        auxiliar[i-l]++
+                        somaAuxiliar = fazer_soma(D, auxiliar)
+                        auxiliar = cortar_galhos_ruins(D, auxiliar, primeiro)
+                        se auxiliar[0] == tamanho(D) faça // a arvore está com o ultimo nó saturado
+                            retorna maior
+                        se somaAuxiliar > soma faça
+                            soma = somaAuxiliar
+                            maior = auxiliar
+                    fim
+
+                    l = 0
+                    j = 0
+            fim
+        fim
+        
+        retorna maior
+    fim
+fim

@@ -62,16 +62,15 @@ def local_search(D, array, m):
     i = m-1
     l = j = 0
     aux[i] = 0
+    maior = array.copy()
     while l != m-1:
         print(aux)
         aux[i-l] = j
         j += 1
-        aux = cut_bad_branches(D, aux, first)
+        sumAux = get_sum(D, aux)
         if j == len(D):
             j = 0
-        if aux[0] == len(D):
-            return array
-        sumAux = get_sum(D, aux)
+
         if sumAux > sum:
             sum = sumAux
             maior = aux.copy()
@@ -88,24 +87,23 @@ def local_search(D, array, m):
                 sumAux = get_sum(D, aux)
                 aux = cut_bad_branches(D, aux, first)
                 if aux[0] == len(D):
-                    return array
+                    return maior
                 if sumAux > sum:
                     sum = sumAux
                     maior = aux.copy()
                         
 
             if l == m-1 and aux[i-l] == len(D)-1:
-                return array
+                return maior
 
-            if aux[0] == len(D):
-                return array
+
 
             if aux[i-l] == array[i-l] and first[i-l] == 1:
                 aux[i-l] = 0
                 aux = cut_bad_branches(D, aux, first)
-                if aux[0] == len(D):
-                    return array
                 sumAux = get_sum(D, aux)
+                if aux[0] == len(D):
+                    return maior
                 if sumAux > sum:
                     sum = sumAux
                     maior = aux.copy()
@@ -117,7 +115,7 @@ def local_search(D, array, m):
                 sumAux = get_sum(D, aux)
                 aux = cut_bad_branches(D, aux, first)
                 if aux[0] == len(D):
-                    return array
+                    return maior
                 if sumAux > sum:
                     sum = sumAux
                     maior = aux.copy()
@@ -128,16 +126,3 @@ def local_search(D, array, m):
 
     return maior
 
-'''       
-content = read_file()
-N = eval(content)
-m = 10
-D = linearize(N, len(N), len(N[0]))
-#pdm = PDM(D, N)
-pdm = greedy(D, m)
-#print(pdm)
-array = pdm[0]
-#print(array)
-#a = local_search(D, array, m)
-#print(a, ',', get_sum(D, a))
-print(pdm)'''

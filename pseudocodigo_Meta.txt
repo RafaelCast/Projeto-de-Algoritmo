@@ -1,0 +1,36 @@
+Entrada: S0 = { Solução corrente }
+Entrada: T0 = { Temperatura inicial }
+Entrada: α = { Taxa de resfriamento }
+Entrada: SAmax = { Número máximo de iterações }
+Saída: S*
+
+inicio
+    S = S0
+    S' = S
+    T = T0
+    IterT = 0
+
+    enquanto (T > 0) faça
+        enquanto (IterT < SAmax) faça
+            IterT += 1
+            Gerar novo vizinho S' ∈ N(S)
+            ∆ = f(S’) – 2*f(S) //Peso 2 para a melhor solução e o algoritmo ter um pouco de prioridade na solução boa
+
+            se (∆ > 0) então
+                S = S'
+
+                se (f(S') > f(S*)) então
+                    S* = S'
+                senão
+                    selecione x ∈ [0, 1]
+
+                    se (x < e^(-∆/T)) então
+                        S* = S'
+            fim se
+        fim enquanto
+        T = α * T
+        IterT = 0
+    fim enquanto
+
+    retorne S*  
+fim
